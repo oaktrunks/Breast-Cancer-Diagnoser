@@ -87,7 +87,7 @@ class PatientDataEntryScreen(tk.Frame):
             PatientData.MITOSES: self.mitoses.get(),
             PatientData.CLASS: None,
         }))
-        result = 'has' if majority_vote is '4' else 'does not have'
+        result = 'has' if majority_vote == 4 else 'does not have'
         self.request_text.set("Result: Patient {} cancer".format(result))
 
     def back_action(self):

@@ -8,10 +8,10 @@ from patient_data_entry_screen import PatientDataEntryScreen
 class BreastCancerDiagnoser(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title = "Breast Cancer Diagnoser"
 
         # Container setup
         container = tk.Frame(self)
+        container.title = "Breast Cancer Diagnoser"
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)

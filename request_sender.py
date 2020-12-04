@@ -14,7 +14,7 @@ class RequestSender():
 
     def __init__(self):
         self.xml_processor = XmlProcessor()
-        self.server_list = [{'host': "localhost", 'port': 7123}]
+        self.server_list = [{'host': "localhost", 'port': 7123}, {'host': "localhost", 'port': 7124}, {'host': "localhost", 'port': 7125}]
 
     def send_request(self, data):
         self.voteDict = defaultdict(int)
