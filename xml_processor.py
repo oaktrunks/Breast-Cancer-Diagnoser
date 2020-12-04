@@ -13,9 +13,6 @@ class XmlProcessor():
             data_dict[child.tag] = child.text
         patient_data = PatientData(data_dict)
 
-        # TODO remove debug print
-        print(patient_data.toString())
-
         return patient_data
 
     # turns PatientData object into XML string

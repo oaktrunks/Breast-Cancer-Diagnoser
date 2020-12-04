@@ -2,6 +2,7 @@ import socketserver
 import threading
 import diagnosis_system
 from xml_processor import XmlProcessor
+import logging
 
 
 class RequestServer():
@@ -20,12 +21,17 @@ class RequestServer():
     def start(self, port):
         self.__server = socketserver.TCPServer(
             (self.host, port), RequestHandler)
+
         if not self.running:
-            # TODO replace this with logging
-            print('**** Starting Server on port {}'.format(port))
-            self.running = True
-            thread = threading.Thread(target=self.__start_server)
-            thread.start()
+            try:
+                logging.info(
+                    f'Server - Starting server on host {self.host} port {port}')
+                self.running = True
+                thread = threading.Thread(target=self.__start_server)
+                thread.start()
+            except:
+                self.running = False
+                logging.error('Server - Error starting server')
 
     def __start_server(self):
         # called by thread created by start()
@@ -35,8 +41,7 @@ class RequestServer():
 
     def stop(self):
         if self.running:
-            # TODO replace this with logging
-            print('**** Stopping Server')
+            logging.info(f'Server - Stopping server')
             self.running = False
             self.__server.shutdown()
 
@@ -53,11 +58,14 @@ class RequestHandler(socketserver.BaseRequestHandler):
         xml_processor = XmlProcessor()
         # self.request is the TCP socket connected to the client
         data = self.request.recv(1024).strip()
-        print("SERVER: {} wrote: {}".format(self.client_address[0], data))
+        logging.info("Server - Request received from {} \n\tData: \n\t{}".format(
+            self.client_address[0], data))
 
         patient_data = xml_processor.parse_patient_data(data)
         classification = '4' if diagnosis_system.diagnose() else '2'
         patient_data.classification = classification
         response = xml_processor.patient_data_to_xml(patient_data)
-        print("SERVER: Responding : {}".format(response))
+
+        logging.info("Server - Responding to {} with \n\tData: \n\t{}".format(
+            self.client_address[0], response))
         self.request.sendall(response)

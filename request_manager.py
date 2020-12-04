@@ -1,5 +1,6 @@
 import request_server
 import request_sender
+import logging
 
 # Constants
 HOST = "localhost"
@@ -13,6 +14,8 @@ class RequestManager:
     def __init__(self):
         self.server = request_server.RequestServer(HOST)
         self.sender = request_sender.RequestSender()
+        logging.basicConfig(filename='app.log', filemode='a', level=logging.INFO,
+                            format='%(asctime)s %(levelname)s - %(message)s')
 
     def start_server(self, port):
         self.server.start(port)
