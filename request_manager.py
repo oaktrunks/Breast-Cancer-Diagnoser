@@ -1,20 +1,21 @@
 import request_server
 import request_sender
 
-#Constants
-PORT = 7123
+# Constants
 HOST = "localhost"
+
 
 class RequestManager:
     """
     Manages incoming and outgoing requests
     """
+
     def __init__(self):
-        self.server = request_server.RequestServer(HOST, PORT)
+        self.server = request_server.RequestServer(HOST)
         self.sender = request_sender.RequestSender()
-    
-    def start_server(self):
-        self.server.start()
+
+    def start_server(self, port):
+        self.server.start(port)
 
     def stop_server(self):
         self.server.stop()
@@ -26,5 +27,4 @@ class RequestManager:
         """
         Sends our request to all peer servers in database
         """
-        self.sender.send_request(data)
-
+        return self.sender.send_request(data)
