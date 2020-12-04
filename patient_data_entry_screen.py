@@ -74,6 +74,21 @@ class PatientDataEntryScreen(tk.Frame):
         self.back_button.grid(row=12, columnspan=2, pady=20)
 
     def send_request(self):
+        # Make sure all data is entered
+        if (self.patient_id.get() == ''
+                or self.clump_thickness.get() == ''
+                or self.uniformity_cell_size.get() == ''
+                or self.uniformity_cell_shape.get() == ''
+                or self.marginal_adhesion.get() == ''
+                or self.single_epithelial_cell_size.get() == ''
+                or self.bare_nuclei.get() == ''
+                or self.bland_chromatin.get() == ''
+                or self.normal_nucleoli.get() == ''
+                or self.mitoses.get() == ''
+                ):
+            self.request_text.set("Please input data for all fields")
+            return
+
         majority_vote = self.controller.request_manager.send_request(PatientData({
             PatientData.PATIENT: self.patient_id.get(),
             PatientData.CLUMP_THICKESS: self.clump_thickness.get(),
@@ -87,8 +102,13 @@ class PatientDataEntryScreen(tk.Frame):
             PatientData.MITOSES: self.mitoses.get(),
             PatientData.CLASS: None,
         }))
-        result = 'has' if majority_vote == 4 else 'does not have'
-        self.request_text.set("Result: Patient {} cancer".format(result))
+        result = "Problem connecting to peer servers"
+        if majority_vote == 4:
+            result = 'Result: Patient has cancer'
+        elif majority_vote == 2:
+            result = 'Result: Patient does not have cancer'
+
+        self.request_text.set(result)
 
     def back_action(self):
         self.controller.show_frame('HomeScreen')
